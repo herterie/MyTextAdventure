@@ -7,25 +7,51 @@ namespace Zuul
     public class Inventory
     {
         private int maxWeight;
-        private Dictionary<string, string> items;
+        private Dictionary<string, Item> items;
         public Inventory(int maxWeight)
         {
             this.maxWeight = maxWeight;
-            this.items = new Dictionary<string, string>();
+            this.items = new Dictionary<string, Item>();
         }
-        public bool Put(Item item)
+        public bool Put(String itemName, Item item)
         {
-            // check the Weight of the Item!
-            // put Item in the items Collection
-            // return true/false for success/failure
-            return false;
+            if (this.Weight()+item.Weight <= maxWeight){
+                this.items.Add(itemName, item);
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
+
+        public int Weight()
+        {
+            int totalWeight = 0;
+
+            foreach(var i in items)
+            {
+                totalWeight += i.Value.Weight;
+            }
+
+            return totalWeight;
         }
         public Item Get(string itemName)
         {
-            // find Item in items Collection
-            // remove Item from items Collection if found
-            // return Item
+            if (items.ContainsKey(itemName))
+            {
+                Item item = items[itemName];
+                items.Remove(itemName);
+                return item;
+            }
             return null;
+        }
+
+        public void Look()
+        {
+            foreach (string key in items.Keys)
+            {
+                Console.WriteLine(key);
+            }
         }
     }
 }

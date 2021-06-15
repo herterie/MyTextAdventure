@@ -7,6 +7,10 @@ namespace Zuul
 		private Parser parser;
 		private Player player;
 
+		//items
+		private Item key;
+		private Item knife;
+
 		public Game ()
 		{
 			parser = new Parser();
@@ -41,9 +45,16 @@ namespace Zuul
 
 			office.AddExit("west", lab);
 
+			//items
+			key = new Item(2, "A old key");
+			knife = new Item(5, "A razor sharp knife");
+
+			outside.addItems("key",key);
+
+			lab.addItems("knife", knife);
+
 			player.CurrentRoom = outside;  // start game outside
 		}
-
 		/**
 		 *  Main play routine.  Loops until end of play.
 		 */
@@ -75,6 +86,7 @@ namespace Zuul
 			Console.WriteLine("Type 'help' if you need help.");
 			Console.WriteLine();
 			Console.WriteLine(player.CurrentRoom.GetLongDescription());
+			player.CurrentRoom.items();
 		}
 
 		/**
@@ -106,15 +118,56 @@ namespace Zuul
 					break;
 				case "look":
 					lookAround();
+                    break;
+				case "items":
+					myItems();
+					break;
+				case "take":
+					Take(command);
+					break;
+				case "drop":
+					Drop(command);
 					break;
 			}
 
-			return wantToQuit;
+            return wantToQuit;
 		}
 
+		private void Take(Command command)
+		{
+			if (!command.HasSecondWord())
+			{
+				// if there is no second word, we don't know which item..
+				Console.WriteLine("Which?");
+			}
+
+			string nameItem = command.GetSecondWord();
+
+			player.TakeFromChest(nameItem);
+
+		}
+		private void Drop(Command command)
+		{
+			if (!command.HasSecondWord())
+			{
+				// if there is no second word, we don't know which item..
+				Console.WriteLine("Which?");
+			}
+
+			string nameItem = command.GetSecondWord();
+
+			player.DropToChest(nameItem);
+		}
+
+		private void myItems()
+        {
+			player.items();
+
+		}
 		private void lookAround()
 		{
 			Console.WriteLine(player.CurrentRoom.GetLongDescription());
+			player.CurrentRoom.items();
 		}
 		// implementations of user commands:
 
@@ -158,6 +211,7 @@ namespace Zuul
 				player.CurrentRoom = nextRoom;
 				Console.WriteLine(player.CurrentRoom.GetLongDescription());
 				player.Damage(1);
+				player.CurrentRoom.items();
 			}
 		}
 
