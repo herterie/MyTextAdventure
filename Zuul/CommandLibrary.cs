@@ -21,6 +21,7 @@ namespace Zuul
 			validCommands.Add("items");
 			validCommands.Add("take");
 			validCommands.Add("drop");
+			validCommands.Add("use");
 		}
 
 		/**

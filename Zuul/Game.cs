@@ -128,9 +128,32 @@ namespace Zuul
 				case "drop":
 					Drop(command);
 					break;
+				case "use":
+					Use(command, command);
+					break;
 			}
 
             return wantToQuit;
+		}
+
+		private void Use(Command command, Command command2)
+		{
+			if (!command.HasSecondWord())
+			{
+				// if there is no second word, we don't know which item..
+				Console.WriteLine("Which?");
+			}
+
+			if (!command.HasTirdWord())
+            {
+				Console.WriteLine("On?");
+            }
+
+			string nameItem = command.GetSecondWord();
+			string onWhat = command.GetTirdWord();
+
+			player.Use(nameItem, onWhat);
+			
 		}
 
 		private void Take(Command command)

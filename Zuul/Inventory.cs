@@ -37,6 +37,10 @@ namespace Zuul
         }
         public Item Get(string itemName)
         {
+            if (itemName == null)
+            {
+                return null;
+            }
             if (items.ContainsKey(itemName))
             {
                 Item item = items[itemName];
